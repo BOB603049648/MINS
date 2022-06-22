@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import shap
+import matplotlib.pyplot as plt
 
 # 页面内容设置
 # 页面名称
@@ -149,18 +151,10 @@ features = {'age': age, 'ASA': ASA,
             }
 
 features_df = pd.DataFrame([features])
-# show_features_df = pd.DataFrame(features, index=None)
-
-# features_df.style.format("{:0.2f}").hidden_index()
-print(features_df)
+#显示输入的特征
 st.table(features_df)
-# from st_aggrid import AgGrid, GridOptionsBuilder
-# # options_builder = GridOptionsBuilder.from_dataframe(features_df)
-# # options_builder.configure_default_column(groupable=True, value=True, enableRowGroup=True, aggFunc='sum', editable=False, wrapText=True, autoHeight=True)
-# # grid_options = options_builder.build()
-# grid_return = AgGrid(features_df, height=70, theme='blue')
-import shap
-import matplotlib.pyplot as plt
+
+#显示预测结果与shap解释图
 if st.button('Predict'):
     prediction = predict_quality(model, features_df)
     st.write("the probability of MINS:")
@@ -176,7 +170,4 @@ if st.button('Predict'):
                         wspace=0.2)
     plt.savefig('test_shap.png')
     st.image('test_shap.png', caption='Individual prediction explaination', use_column_width=True)
-    #st.metric("the probability of MINS:", round(prediction[0], 4))
-    #st.write(' Based on feature values, the probability of MINS is ' + str(prediction))
-
 
